@@ -4,8 +4,8 @@ Script to collect the inventory from cloud.redhat.com and run against the inform
 
 # Help
 ~~~
-#./inventory-swatch_info.py -h
-Usage: insights-inventory-exporter.py [options]
+#./inventory_swatch_info.py -h
+Usage: inventory_swatch_info.py [options]
 
 Options:
   -h, --help            show this help message and exit
