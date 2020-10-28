@@ -24,7 +24,7 @@ Options:
 
 # Example output
 ~~~
-$ cat  
+$ cat insights_swatch_match.csv
 id,server,reporter,arch,core_per_sockets,infrastructure.type,number_of_cpus,number_of_socket,satellite_managed,subscription_status,satellite_id,hypervisor,sw_inventory_id,sw_cores,sw_display_name,sw_hardware_type,sw_inventory_id,sw_last_seen,sw_measurement_type,sw_number_of_guests,sw_sockets,sw_subscription_manager_id
 ...
 ~~~
