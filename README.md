@@ -24,11 +24,9 @@ Options:
 
 # Example output
 ~~~
-$ cat compact_version-rhn-support-wpinheir.csv 
-id,server,reporter,arch,core_per_sockets,infrastructure.type,number_of_cpus,number_of_socket,satellite_managed,subscription_status,satellite_id,hypervisor
-4e42190e-de97-4f7b-a119-e0efcc40589a,vm001.local.domain,puptoo,x86_64,1,virtual,8,8,False,no subscription status key,,No hypervisor
-4914e435-d49e-4f7f-8fac-73614141824c,vm007.local.domain,puptoo,x86_64,1,virtual,8,8,False,no subscription status key,,No hypervisor
-a99297d7-3bf8-47e4-8547-83ee97f886e1,vm0005.local.domain,yupana,x86_64,1,virtual,8,8,True,Fully entitled,944e253d-09a8-444b-acc0-7bb1203a1b57,No hypervisor
+$ cat  
+id,server,reporter,arch,core_per_sockets,infrastructure.type,number_of_cpus,number_of_socket,satellite_managed,subscription_status,satellite_id,hypervisor,sw_inventory_id,sw_cores,sw_display_name,sw_hardware_type,sw_inventory_id,sw_last_seen,sw_measurement_type,sw_number_of_guests,sw_sockets,sw_subscription_manager_id
+...
 ~~~
 
 
