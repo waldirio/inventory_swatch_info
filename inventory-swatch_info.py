@@ -48,6 +48,7 @@ stage1_lst = ["id",
               "arch",
               "core_per_sockets",
               "infrastructure.type",
+              "installed_product",
               "number_of_cpus",
               "number_of_socket",
               "satellite_managed",
@@ -182,6 +183,18 @@ def system_profile(id, display_name, reporter, satellite_id):
         stage_lst.append("no infrastructure_type key")
 
     try:
+        local_var = ""
+        if (len(jsonresult['results'][0]['system_profile']['installed_products']) > 0):
+            for element in jsonresult['results'][0]['system_profile']['installed_products']:
+                local_var = local_var + ' | ' + element['id']
+            # installed_product = jsonresult['results'][0]['system_profile']['installed_products']
+            installed_product = local_var
+            stage_lst.append(installed_product)
+    except KeyError:
+        stage_lst.append("no installed_product key")
+
+
+    try:
         number_of_cpus = jsonresult['results'][0]['system_profile']['number_of_cpus']
         stage_lst.append(number_of_cpus)
     except KeyError:
@@ -225,7 +238,7 @@ def hypervisor_guests():
     for ch in final_list:
         if 'virt-who-' in ch[1]:
             stage_lst.append(ch[1])
-            stage_lst.append(ch[10])
+            stage_lst.append(ch[11])
             hypervisor_guests_list.append(stage_lst)
             stage_lst = []
 
@@ -265,6 +278,7 @@ def hypervisor_guests():
                     stage_lst.append(each_ch[8])
                     stage_lst.append(each_ch[9])
                     stage_lst.append(each_ch[10])
+                    stage_lst.append(each_ch[11])
                     stage_lst.append(mapped_ch[2])
 
             if (count == 1):
@@ -282,6 +296,7 @@ def hypervisor_guests():
                 stage_lst.append(each_ch[8])
                 stage_lst.append(each_ch[9])
                 stage_lst.append(each_ch[10])
+                stage_lst.append(each_ch[11])
                 stage_lst.append("No hypervisor")
                 complete_list.append(stage_lst)
                 stage_lst = []
@@ -298,6 +313,7 @@ def hypervisor_guests():
             stage_lst.append(each_ch[8])
             stage_lst.append(each_ch[9])
             stage_lst.append(each_ch[10])
+            stage_lst.append(each_ch[11])
             stage_lst.append("No hypervisor")
             complete_list.append(stage_lst)
             stage_lst = []
@@ -462,9 +478,9 @@ if __name__ == "__main__":
     default_login = "default"
     default_password = ""
 
+
     parser = OptionParser()
-    # parser.add_option("-l", "--login", dest="login", help="Login user", metavar="LOGIN", default=default_login)
-    parser.add_option("-l", "--login", dest="login", help="Login user", metavar="LOGIN")
+    parser.add_option("-l", "--login", dest="login", help="Login user", metavar="LOGIN", default=default_login)
     parser.add_option("-f", "--filename", dest="filename", help="Login user", metavar="FILENAME")
     parser.add_option("-p", "--password", dest="password", help="Password for specified user. Will prompt if omitted", metavar="PASSWORD", default=default_password)
     parser.add_option("-s", "--server", dest="server", help="FQDN of server - omit https://", metavar="SERVER", default=default_server)
