@@ -384,7 +384,7 @@ def process_info_swatch(login, password, server):
     try:
         next_url = jsonresult['links']['next']
     except KeyError:
-        next_url = None
+        next_url = "empty"
 
     while (next_url is not None):
         url = 'https://' + server + '/api/rhsm-subscriptions/v1/hosts/products/RHEL?limit=100&offset=' + str(offset) + '&sort=display_name'
