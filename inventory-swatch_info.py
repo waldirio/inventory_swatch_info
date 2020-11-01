@@ -54,7 +54,8 @@ stage1_lst = ["id",
               "satellite_managed",
               "subscription_status",
               "satellite_id",
-              "hypervisor"]
+              "hypervisor",
+              "# of rhel guests"]
 
 complete_list.append(stage1_lst)
 stage1_lst = []
@@ -193,7 +194,6 @@ def system_profile(id, display_name, reporter, satellite_id):
     except KeyError:
         stage_lst.append("no installed_product key")
 
-
     try:
         number_of_cpus = jsonresult['results'][0]['system_profile']['number_of_cpus']
         stage_lst.append(number_of_cpus)
@@ -256,6 +256,8 @@ def hypervisor_guests():
                 stage_lst.append(srv['display_name'])
                 stage_lst.append(srv['inventory_id'])
                 stage_lst.append(hyper[0])
+                # Number of guests
+                stage_lst.append(len(jsonresult['data']))
                 hypervisor_guests_final.append(stage_lst)
                 stage_lst = []
 
@@ -279,7 +281,10 @@ def hypervisor_guests():
                     stage_lst.append(each_ch[9])
                     stage_lst.append(each_ch[10])
                     stage_lst.append(each_ch[11])
+                    # hypervisor name
                     stage_lst.append(mapped_ch[2])
+                    # Number of guests
+                    stage_lst.append("No Guests here - VM")
 
             if (count == 1):
                 complete_list.append(stage_lst)
@@ -298,6 +303,9 @@ def hypervisor_guests():
                 stage_lst.append(each_ch[10])
                 stage_lst.append(each_ch[11])
                 stage_lst.append("No hypervisor")
+                # Number of guests
+                # stage_lst.append(mapped_ch[3])
+                stage_lst.append("No Guests here - VM")
                 complete_list.append(stage_lst)
                 stage_lst = []
 
@@ -315,6 +323,9 @@ def hypervisor_guests():
             stage_lst.append(each_ch[10])
             stage_lst.append(each_ch[11])
             stage_lst.append("No hypervisor")
+            # Number of guests
+            # stage_lst.append(mapped_ch[3])
+            stage_lst.append("No Guests here - VM")
             complete_list.append(stage_lst)
             stage_lst = []
 
@@ -332,7 +343,6 @@ def csv_export():
         print "The file compact_version-{}.csv was created!".format(login)
 
 
-
 def process_info_swatch(login, password, server):
     """
     Function responsible for collect and process the main info regarding
@@ -343,21 +353,23 @@ def process_info_swatch(login, password, server):
     global complete_dataset_list
 
     with open('compact_version-%s.csv' % login, 'r') as fp:
-        csv_reader = csv.reader(fp, delimiter = ',')
+        csv_reader = csv.reader(fp, delimiter=',')
         stage_lst = []
         for row in csv_reader:
-            print row
+            # print row
             if row[0] == "id":
                 print "first line"
                 stage_lst = row
-                aux = ['sw_inventory_id','sw_cores','sw_display_name','sw_hardware_type','sw_inventory_id','sw_last_seen','sw_measurement_type','sw_number_of_guests','sw_sockets','sw_subscription_manager_id']
+                aux = ['sw_inventory_id', 'sw_cores', 'sw_display_name', 
+                       'sw_hardware_type', 'sw_inventory_id', 'sw_last_seen', 
+                       'sw_measurement_type', 'sw_number_of_guests', 
+                       'sw_sockets', 'sw_subscription_manager_id']
                 stage_lst = stage_lst + aux
                 complete_dataset_list.append(stage_lst)
             else:
-                print row
+                # print row
                 inventory_list.append(row)
 
-    
     try:
         url = 'https://' + server + '/api/rhsm-subscriptions/v1/hosts/products/RHEL?limit=100&offset=0&sort=display_name'
         result = requests.get(url, auth=(login, password)).content
@@ -375,8 +387,6 @@ def process_info_swatch(login, password, server):
         print
         "FATAL Error - %s" % (e)
         sys.exit(2)
-
-
 
     limit = 100
     offset = 0
@@ -399,7 +409,6 @@ def process_info_swatch(login, password, server):
         except KeyError:
             next_url = None
 
-
     stage_lst = []
     for srv_inv in inventory_list:
         count = 0
@@ -419,45 +428,72 @@ def process_info_swatch(login, password, server):
 
                 hardware_type_swatch = [srv_swatch['hardware_type']]
                 stage_lst = stage_lst + hardware_type_swatch
-                
+
                 inventory_id_swatch = [srv_swatch['inventory_id']]
                 stage_lst = stage_lst + inventory_id_swatch
-                
+
                 last_seen_swatch = [srv_swatch['last_seen']]
                 stage_lst = stage_lst + last_seen_swatch
-                
+
                 measurement_type_swatch = [srv_swatch['measurement_type']]
                 stage_lst = stage_lst + measurement_type_swatch
-                
+
                 try:
                     number_of_guests_swatch = [srv_swatch['number_of_guests']]
                     stage_lst = stage_lst + number_of_guests_swatch
                 except KeyError:
                     number_of_guests_swatch = ["no number_of_guests key"]
                     stage_lst = stage_lst + number_of_guests_swatch
-                
+
                 sockets_swatch = [srv_swatch['sockets']]
                 stage_lst = stage_lst + sockets_swatch
-                
+
                 subscription_manager_id_swatch = [srv_swatch['subscription_manager_id']]
                 stage_lst = stage_lst + subscription_manager_id_swatch
-                
-            
+
         if count == 1:
             complete_dataset_list.append(stage_lst)
             stage_lst = []
         else:
-            stage_lst = srv_inv + ["not in swatch","not in swatch","not in swatch","not in swatch","not in swatch","not in swatch","not in swatch","not in swatch"]
+            stage_lst = srv_inv + ["not in swatch", "not in swatch", 
+                                   "not in swatch", "not in swatch", 
+                                   "not in swatch", "not in swatch", 
+                                   "not in swatch", "not in swatch"]
             complete_dataset_list.append(stage_lst)
             stage_lst = []
 
+    local_list = complete_dataset_list
+    complete_dataset_list = []
+
+    for row in local_list:
+        if "virt-who" in row[1]:
+            count = 0
+            added = 0
+            num_guests = 0
+            for element in hypervisor_guests_final:
+                if row[1] == element[2] and added == 0:
+                    count = count + 1
+                    added = added + 1
+                    num_guests = element[3]
+
+            if count != 0:
+                row.pop(13)
+                row.insert(13, num_guests)
+                complete_dataset_list.append(row)
+                count = 0
+                added = 0
+            else:
+                complete_dataset_list.append(row)
+
+        else:
+            complete_dataset_list.append(row)
 
 
 def csv_export_swatch():
     """
     Function that will generate the final csv file.
     """
-    with open('insights_swatch_match.csv', 'w') as csv_file:
+    with open('insights_swatch_match-%s.csv' % login, 'w') as csv_file:
         csv_writer = csv.writer(csv_file)
 
         for rows in complete_dataset_list:
@@ -466,18 +502,11 @@ def csv_export_swatch():
         print "The file insights_swatch_match.csv was created!"
 
 
-
-
-
-
-
-
 if __name__ == "__main__":
 
     default_server = "cloud.redhat.com"
     default_login = "default"
     default_password = ""
-
 
     parser = OptionParser()
     parser.add_option("-l", "--login", dest="login", help="Login user", metavar="LOGIN", default=default_login)
