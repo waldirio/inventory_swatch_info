@@ -31,29 +31,41 @@ id,server,reporter,arch,core_per_sockets,infrastructure.type,number_of_cpus,numb
 
 
 # How to implement this script
-- Clone the project
+
+How to implement this script.
+
+Fedora 33:
+
+- Install python 2.7 and git
 ~~~
-# git clone https://github.com/waldirio/inventory_swatch_info.git
-# cd inventory_swatch_info
+[user1@fedoraxfce ~]$ sudo dnf install python2.7 git -y
+~~~
+- Install virtualenv
+~~~
+[user1@fedoraxfce ~]$ pip install virtualenv
 ~~~
 - Create a new virtual environment using python 2.7
 ~~~
-# python2.7 -m virtualenv /tmp/.virtualenv/inventory_swatch_info
+[user1@fedoraxfce ~]$ virtualenv -p /usr/bin/python2.7 /tmp/.virtualenv/inventory_swatch
+~~~
+- Clone the project and change to the directory
+~~~
+[user1@fedoraxfce ~]$ git clone https://github.com/waldirio/inventory_swatch_info.git
+[user1@fedoraxfce ~]$ cd inventory_swatch_info
 ~~~
 - Load it
 ~~~
-$ source /tmp/.virtualenv/inventory_swatch_info/bin/activate
-(inventory_swatch_info) $
+[user1@fedoraxfce inventory_swatch_info]$ source /tmp/.virtualenv/inventory_swatch/bin/activate
 ~~~
-- Install the requirements
+- Install requirements
 ~~~
-(inventory_swatch_info) $ pip install -r requirements 
+(inventory_swatch) [user1@fedoraxfce inventory_swatch_info]$ pip install -r requirements
 ~~~
-- Uset it.
+- Use it
 ~~~
-./inventory_swatch_info.py
+./inventory-swatch_info.py
 ~~~
-or
+or 
 ~~~
-./inventory_swatch_info.py -v -l `username` -p `password`
+./inventory-swatch_info.py -v -l 'username' -p 'password'
 ~~~
