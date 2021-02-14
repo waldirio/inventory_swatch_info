@@ -31,29 +31,43 @@ id,server,reporter,arch,core_per_sockets,infrastructure.type,number_of_cpus,numb
 
 
 # How to implement this script
-- Clone the project
-~~~
-# git clone https://github.com/waldirio/inventory_swatch_info.git
-# cd inventory_swatch_info
-~~~
-- Create a new virtual environment using python 2.7
-~~~
-# python2.7 -m virtualenv /tmp/.virtualenv/inventory_swatch_info
-~~~
-- Load it
-~~~
-$ source /tmp/.virtualenv/inventory_swatch_info/bin/activate
-(inventory_swatch_info) $
-~~~
-- Install the requirements
-~~~
-(inventory_swatch_info) $ pip install -r requirements 
-~~~
-- Uset it.
-~~~
-./inventory_swatch_info.py
-~~~
-or
-~~~
-./inventory_swatch_info.py -v -l `username` -p `password`
-~~~
+
+RHEL 8.3:
+
+* Install python 2.7 
+~~~ 
+[user1@rhel83swatch ~]$ sudo yum module install python27 -y
+~~~ 
+* Install git
+~~~ 
+[user1@rhel83swatch ~]$ sudo yum install git -y
+~~~ 
+* Install virtualenv
+~~~ 
+[user1@rhel83swatch ~]$ /usr/bin/pip2.7 install --user virtualenv
+~~~ 
+* Create a new virtual environment using python 2.7
+~~~ 
+[user1@rhel83swatch ~]$ virtualenv -p /usr/bin/python2.7 /tmp/.virtualenv/inventory_swatch
+~~~ 
+* Clone the project and change to the directory
+~~~ 
+[user1@rhel83swatch ~]$ git clone https://github.com/waldirio/inventory_swatch_info.git
+[user1@rhel83swatch ~]$ cd inventory_swatch_info
+~~~ 
+* Load it
+~~~ 
+[user1@rhel83swatch inventory_swatch_info]$ source /tmp/.virtualenv/inventory_swatch/bin/activate
+~~~ 
+* Install the requirements
+~~~ 
+(inventory_swatch) [user1@rhel83swatch inventory_swatch_info]$ pip install -r requirements
+~~~ 
+* Use it
+~~~ 
+./inventory-swatch_info.py
+~~~ 
+or 
+~~~ 
+./inventory-swatch_info.py -v -l 'username' -p 'password'
+~~~ 
