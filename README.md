@@ -71,3 +71,40 @@ or
 ~~~ 
 ./inventory-swatch_info.py -v -l 'username' -p 'password'
 ~~~ 
+
+
+Fedora 33:
+
+- Install python 2.7 and git
+~~~
+[user1@fedoraxfce ~]$ sudo dnf install python2.7 git -y
+~~~
+- Install virtualenv
+~~~
+[user1@fedoraxfce ~]$ pip install virtualenv
+~~~
+- Create a new virtual environment using python 2.7
+~~~
+[user1@fedoraxfce ~]$ virtualenv -p /usr/bin/python2.7 /tmp/.virtualenv/inventory_swatch
+~~~
+- Clone the project and change to the directory
+~~~
+[user1@fedoraxfce ~]$ git clone https://github.com/waldirio/inventory_swatch_info.git
+[user1@fedoraxfce ~]$ cd inventory_swatch_info
+~~~
+- Load it
+~~~
+[user1@fedoraxfce inventory_swatch_info]$ source /tmp/.virtualenv/inventory_swatch/bin/activate
+~~~
+- Install requirements
+~~~
+(inventory_swatch) [user1@fedoraxfce inventory_swatch_info]$ pip install -r requirements
+~~~
+- Use it
+~~~
+./inventory-swatch_info.py
+~~~
+or 
+~~~
+./inventory-swatch_info.py -v -l 'username' -p 'password'
+~~~
